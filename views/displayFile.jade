@@ -1,8 +1,10 @@
 extends ../node_modules/jade-bootstrap/_bootstrap
 
 block body
-  +navbar("ECS Movies", "dropdown_menu")
+  +navbar("Display Page", "dropdown_menu")
     +nav_item("/", "active") Home
   .container
     p !{file}
-    
+  .container    
+        button(type='submit', onclick="/saveXML?file" + path, method-"get", class="btn").
+          Save

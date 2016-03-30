@@ -34,46 +34,44 @@ router.get('/search', function(req, res) {
       console.error(error);
     } else{
       var content = result.result;
-      console.log(content);
+      //console.log(content);
       content = content.split("\n");
-      //console.log(searchString);
+      console.log(searchString);
       res.render('search', { title: 'Search Results', query: content });  
     }
   });
 });
 
-function replaceWords(splitQuery){
+/*function which add '' and ft to logical functions*/
+function replaceWords(searchWords){
   var newArr = [];
-  for(var i = 0; i < splitQuery.length; i++){
-    if(splitQuery[i] === "and"){
-      if(i != splitQuery.length - 1){
-        if(splitQuery[i + 1] === "not"){
-          newArr[i] = "' ftand ";
-        } else {
-          newArr[i] = "' ftand '";
-        }
-      }
-    }else if(splitQuery[i] === "or"){
-      if(i != splitQuery.length - 1){
-		if(splitQuery[i + 1] === "not"){
-		  newArr[i] = "' ftor ";
-		} else {
-		  newArr[i] = "' ftor '";
-		  }
-      }
-    }else if(splitQuery[i] === "not"){
+  for(var i = 0; i < searchWords.length; i++){
+    if((searchWords[i] === "and") && (i != searchWords.length - 1)) {
+      if(searchWords[i + 1] === "not"){
+        newArr[i] = "' ftand ";
+      } else {
+        newArr[i] = "' ftand '";
+      }      
+    }else if((searchWords[i] === "or") && (i != searchWords.length - 1)){
+	  if(searchWords[i + 1] === "not"){
+		newArr[i] = "' ftor ";
+	  } else {
+	    newArr[i] = "' ftor '";
+	  }
+    }else if(searchWords[i] === "not"){
       newArr[i] = " ftnot '";
     }else{
-        newArr[i] = splitQuery[i];
-		if(i != splitQuery.length - 1){
+        newArr[i] = searchWords[i];
+		if(i != searchWords.length - 1){
 		  newArr[i] = newArr[i] + " ";
 		}
-    }	
-	if(newArr[0] != " ftnot '"){
-	    newArr[0] = "'" + newArr[0];
-	}
-	newArr[newArr.length - 1] = newArr[newArr.length - 1] + "'";
-	return newArr;
+    }
+  }    	
+  if(newArr[0] != " ftnot '"){
+    newArr[0] = "'" + newArr[0];
+  }
+  newArr[newArr.length - 1] = newArr[newArr.length - 1] + "'";
+  return newArr;
 }
 
 /* Search Markup Function. */
@@ -85,9 +83,9 @@ router.get('/searchXQuery', function(req, res) {
       console.error(error);
     } else{
       var content = result.result;
-      console.log(content);
+      //console.log(content);
       content = content.split("\n");
-      //console.log(searchMarkup);
+      console.log(searchMarkup);
       res.render('searchXQuery', { title: 'Search Results', query: content });  
     }
   });  
@@ -100,10 +98,48 @@ router.get('/displayFile',function(req,res){
     if(error) {
       console.error(error);
     } else{
-        var content = result.result;
-      res.render('displayFile', { title: 'Colenso Project', file: content });  
+      var content = result.result;
+      res.render('displayFile', { title: 'Colenso Project', file: content, path: req.query.file});  
     }
   });    
 });
 
+/*routes to save XML*/
+router.get('/saveXML',function(req,res){  
+  console.log(req.query.file);
+  client.execute("XQUERY declare namespace tei='http://www.tei-c.org/ns/1.0';" + "(doc('Colenso/"+req.query.file+"'))[1]",
+  function (error,result){
+    if(error) {
+      console.error(error);
+    } else{
+      var content = result.result;
+      var file = getFilePath(req.query.file);
+      fs.writefile(file.filepath + file.filename, content, {flags: 'w'}, 
+      function(error,result){
+        if(error){
+          console.error(error);
+        }else{
+          console.log('Saved XML');
+          res.render('displayFile', { title: 'Colenso Project', file: content, path: req.query.file, saved: 'File Saved'});
+        }
+      });
+    }
+  });    
+});
+
+/*routes to Browse*/
+router.get("/Browse",function(req,res){
+  client.execute("XQUERY declare default element namespace 'http://www.tei-c.org/ns/1.0'; for $n in .//TEI" + " return db:path($n)",
+	  function (error, result) {
+		if(error){ 
+		  console.error(error);
+		} else {
+          var content = result.result;
+          //console.log(content);
+          content = content.split("\n");
+		  res.render('Browse', { title: 'Colenso Project', query: content });
+		}
+	  }
+	);
+});
 module.exports = router;
