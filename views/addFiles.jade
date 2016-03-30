@@ -13,5 +13,6 @@ block body
       .container
         form(action="/uploadXML", method="get")
           div(class="col-xs-3", style="padding-left: 0px;")
-            input(type="text", name="uploadedFile", class="form-control")
+            input(type="text", name="uploadedFile", class="form-control", required="true")
           input(type="submit" class="btn btn-default")
+        p| incorrect file directory !{err}

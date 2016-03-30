@@ -176,7 +176,15 @@ client.execute("XQUERY declare default element namespace 'http://www.tei-c.org/n
 router.get('/uploadXML',function(req,res){  
   var uploadedFile = req.query.uploadedFile;
   console.log(uploadedFile);
-  client.execute("ADD " + uploadedFile);
+  client.execute("ADD " + uploadedFile,
+    function (error, result) {
+		if(error){ 
+          res.render('addFiles', { title: 'Colenso Project', err: error});
+		  console.error(error);
+		} else {
+		  res.render('index', { title: 'Colenso Project'});
+		}
+    });
 });
 
 module.exports = router;
