@@ -167,7 +167,7 @@ client.execute("XQUERY declare default element namespace 'http://www.tei-c.org/n
 		  console.error(error);
 		} else {
 		  res.render('addFiles', { title: 'Colenso Project', place: result.result });
-		}
+		} 
 	  }
 	);
 });
