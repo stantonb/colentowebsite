@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var basex = require('basex');
+var fs = require('fs');
 var client = new basex.Session("127.0.0.1", 1984, "admin", "admin");
 client.execute("OPEN Colenso");
 
@@ -91,13 +92,14 @@ router.get('/searchXQuery', function(req, res) {
   });  
 });
 
-/*routes to newfile*/
+/*routes to displayfile*/
 router.get('/displayFile',function(req,res){  
   client.execute("XQUERY declare namespace tei='http://www.tei-c.org/ns/1.0';" + "(doc('Colenso/"+req.query.file+"'))[1]",
   function (error,result){
     if(error) {
       console.error(error);
     } else{
+      //console.log(req.query.file);
       var content = result.result;
       res.render('displayFile', { title: 'Colenso Project', file: content, path: req.query.file});  
     }
@@ -113,8 +115,8 @@ router.get('/saveXML',function(req,res){
       console.error(error);
     } else{
       var content = result.result;
-      var file = getFilePath(req.query.file);
-      fs.writefile(file.filepath + file.filename, content, {flags: 'w'}, 
+      var file = filePath(req.query.file);
+      fs.writeFile(file.filepath + file.filename, content, {flags: 'w'}, 
       function(error,result){
         if(error){
           console.error(error);
@@ -126,6 +128,19 @@ router.get('/saveXML',function(req,res){
     }
   });    
 });
+
+/*splits req.query.file into parts*/
+function filePath(file){
+	var splitfile = file.split("/");
+	var path = __dirname + '/../saveFiles/';
+	for(var i = 0; i < splitfile.length - 1; i++){
+		path += splitfile[i] + "/";
+		if(!fs.existsSync(path)){
+			fs.mkdirSync(path);
+		}
+	}
+	return {filepath: path, filename: splitfile[splitfile.length-1]};
+}
 
 /*routes to Browse*/
 router.get("/Browse",function(req,res){
@@ -142,4 +157,5 @@ router.get("/Browse",function(req,res){
 	  }
 	);
 });
+
 module.exports = router;

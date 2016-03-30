@@ -2,9 +2,9 @@ extends ../node_modules/jade-bootstrap/_bootstrap
 
 block body
   +navbar("Display Page", "dropdown_menu")
-    +nav_item("/", "active") Home
+    +nav_item("/", "active") Home    
+    +nav_item("/browse", "active") Browse
   .container
     p !{file}
-  .container    
-        button(type='submit', onclick="/saveXML?file" + path, method-"get", class="btn").
-          Save
+  .container   
+    a(href ="/saveXML?file=" + path, class="btn") Save
