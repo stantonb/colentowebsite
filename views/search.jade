@@ -3,6 +3,8 @@ extends ../node_modules/jade-bootstrap/_bootstrap
 block body
   +navbar("Colenso Project", "dropdown_menu")
     +nav_item("/", "active") Home
+    +nav_item("/browse", "active") Browse    
+    +nav_item("/addFiles", "active") Add Files
   .container
     h1 Search results for #{searchString}
     .container

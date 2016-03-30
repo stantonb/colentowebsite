@@ -22,7 +22,7 @@ router.get("/",function(req,res){
 
 /* Search String Function. */
 router.get('/search', function(req, res) {    
-  var searchString = req.query.searchString
+  var searchString = req.query.searchString;
   var searchwords = searchString.split(" ");
   searchwords = replaceWords(searchwords);
   var replacedQuery = "";
@@ -160,17 +160,23 @@ router.get("/Browse",function(req,res){
 
 /*routes to Add Files*/
 router.get("/addFiles",function(req,res){
-  client.execute("XQUERY declare default element namespace 'http://www.tei-c.org/ns/1.0'; for $n in .//TEI" + " return db:path($n)",
+client.execute("XQUERY declare default element namespace 'http://www.tei-c.org/ns/1.0';" +
+  " (//name[@type='place'])[1] ",
 	  function (error, result) {
 		if(error){ 
 		  console.error(error);
 		} else {
-          var content = result.result;
-          //console.log(content);
-          content = content.split("\n");
-		  res.render('Browse', { title: 'Colenso Project', query: content });
+		  res.render('addFiles', { title: 'Colenso Project', place: result.result });
 		}
 	  }
 	);
 });
+
+/*routes to upload XML*/
+router.get('/uploadXML',function(req,res){  
+  var uploadedFile = req.query.uploadedFile;
+  console.log(uploadedFile);
+  client.execute("ADD " + uploadedFile);
+});
+
 module.exports = router;

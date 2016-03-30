@@ -4,12 +4,14 @@ block body
   +navbar("Colenso Project", "dropdown_menu")
     +nav_item("/", "active") Home
     +nav_item("/browse", "active") Browse
-    nav_item("/addFiles", "active") Add Files
+    +nav_item("/addFiles", "active") Add Files
   .container
     div(class="jumbotron")
       h1= title
       .container
-      p| Welcome to #{title}. We have a Collection of letter for you to browse.
-       | We are based in !{place}.
+      p| Add XML files to the server.
       .container
-          
+        form(action="/uploadXML", method="get")
+          div(class="col-xs-3", style="padding-left: 0px;")
+            input(type="text", name="uploadedFile", class="form-control")
+          input(type="submit" class="btn btn-default")
