@@ -3,8 +3,10 @@ extends ../node_modules/jade-bootstrap/_bootstrap
 block body
   +navbar("Display Page", "dropdown_menu")
     +nav_item("/", "active") Home    
-    +nav_item("/browse", "active") Browse
+    +nav_item("/browse", "active") Browse    
+    +nav_item("/addFiles", "active") Add Files
   .container
-    p !{file}
+    div(class="jumbotron")
+      p !{file}
   .container   
-    a(href ="/saveXML?file=" + path, class="btn") Save
+    a(class="btn btn-lg btn-info", href ="/saveXML?file=" + path) Save

@@ -4,19 +4,23 @@ block body
   +navbar("Colenso Project", "dropdown_menu")
     +nav_item("/", "active") Home
     +nav_item("/browse", "active") Browse
+    +nav_item("/addFiles", "active") Add Files
   .container
-    h1= title
-    .container
-    p| Welcome to #{title}. We have a Collection of letter for you to browse.
-     | We are based in !{place}.
-    .container
-      p| String Search.
-      form(action="/search", method="get")
-        input(type="text", name="searchString")
-        input(type="submit", class="btn")   
+    div(class="jumbotron")
+      h1= title
+      .container
+      p| Welcome to #{title}. We have a Collection of letter for you to browse.
+       | We are based in !{place}.
+      .container
+        p| String Search.
+        form(action="/search", method="get")
+          div(class="col-xs-3", style="padding-left: 0px;")
+            input(type="text", name="searchString", class="form-control")
+          input(type="submit", class="btn btn-default")   
 
-    .container
-      p| Markup Search.
-      form(action="/searchXQuery", method="get")
-        input(type="text", name="searchMarkup")
-        input(type="submit")  
+      .container
+        p| Markup Search.
+        form(action="/searchXQuery", method="get")
+          div(class="col-xs-3", style="padding-left: 0px;")
+            input(type="text", name="searchMarkup", class="form-control")
+          input(type="submit" class="btn btn-default") 

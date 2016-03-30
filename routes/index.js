@@ -158,4 +158,19 @@ router.get("/Browse",function(req,res){
 	);
 });
 
+/*routes to Add Files*/
+router.get("/addFiles",function(req,res){
+  client.execute("XQUERY declare default element namespace 'http://www.tei-c.org/ns/1.0'; for $n in .//TEI" + " return db:path($n)",
+	  function (error, result) {
+		if(error){ 
+		  console.error(error);
+		} else {
+          var content = result.result;
+          //console.log(content);
+          content = content.split("\n");
+		  res.render('Browse', { title: 'Colenso Project', query: content });
+		}
+	  }
+	);
+});
 module.exports = router;

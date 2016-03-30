@@ -3,8 +3,8 @@ extends ../node_modules/jade-bootstrap/_bootstrap
 block body
   +navbar("Colenso Project", "dropdown_menu")
     +nav_item("/", "active") Home
-    +nav_item("/browse", "active") Browse    
-    +nav_item("/addFiles", "active") Add Files
+    +nav_item("/browse", "active") Browse
+    nav_item("/addFiles", "active") Add Files
   .container
     div(class="jumbotron")
       h1= title
@@ -12,6 +12,4 @@ block body
       p| Welcome to #{title}. We have a Collection of letter for you to browse.
        | We are based in !{place}.
       .container
-        each file in query
-          li: a(href = "/displayFile?file=/" + file)
-            !{file}
+          
